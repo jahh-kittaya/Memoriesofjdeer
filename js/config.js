@@ -64,7 +64,7 @@ const CONFIG = {
     // ใส่ไฟล์เพลง (mp3) ไว้ในโฟลเดอร์ music/ แล้วใส่ชื่อไฟล์ที่นี่ หรือเว้นว่าง ""
     src: "",
     // หรือใส่ YouTube video ID เพื่อเล่นเพลงจาก YouTube (ถ้าตั้งค่านี้ จะใช้ YouTube แทน src)
-    youtubeId: "KNZH-emehxA",
+    youtubeId: "UgrXNEpKQo4",
     title: "เพลงของเรา",
   },
 };
