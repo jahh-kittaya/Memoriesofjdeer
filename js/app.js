@@ -237,12 +237,14 @@ function renderLetter() {
 
   // เผื่อกรณีผู้ใช้เลื่อนมาถึงจดหมายโดยไม่ผ่านปุ่ม intro → เริ่มพิมพ์เมื่อมองเห็น
   const letterSec = document.getElementById("letter");
+  // threshold ต่ำ + rootMargin ติดลบ เพื่อให้เริ่มพิมพ์ทันทีที่การ์ดโผล่เข้ามา
+  // (สำคัญบนจอมือถือที่การ์ดอาจสูงกว่าจอ ทำให้เห็นไม่ถึง 40% พร้อมกัน)
   const io = new IntersectionObserver((entries) => {
     if (entries.some((e) => e.isIntersecting)) {
       startLetterTyping();
       io.disconnect();
     }
-  }, { threshold: 0.4 });
+  }, { threshold: 0.1, rootMargin: "0px 0px -15% 0px" });
   io.observe(letterSec);
 }
 
