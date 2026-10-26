@@ -157,11 +157,16 @@ function renderTimeline() {
     .join("");
 }
 
-/* ---------- เหตุผลที่รัก (การ์ดพลิกได้) ---------- */
+/* ---------- เหตุผลที่รัก ---------- */
 function renderReasons() {
   const cfg = CONFIG.reasons;
   const section = document.getElementById("reasons");
-  if (!cfg || !cfg.items || !cfg.items.length) {
+  const grid = document.getElementById("reasonsGrid");
+
+  const hasProse = cfg && cfg.style === "prose" && cfg.paragraphs && cfg.paragraphs.length;
+  const hasCards = cfg && cfg.items && cfg.items.length;
+
+  if (!cfg || (!hasProse && !hasCards)) {
     if (section) section.style.display = "none";
     return;
   }
@@ -169,7 +174,17 @@ function renderReasons() {
   if (cfg.heading) document.getElementById("reasonsHeading").textContent = cfg.heading;
   document.getElementById("reasonsSub").textContent = cfg.subheading || "";
 
-  const grid = document.getElementById("reasonsGrid");
+  // โหมดจดหมายยาว (prose)
+  if (hasProse) {
+    grid.className = "reasons-prose";
+    grid.innerHTML = cfg.paragraphs
+      .map((p) => `<p>${formatEmphasis(p)}</p>`)
+      .join("");
+    return;
+  }
+
+  // โหมดการ์ดพลิก (cards)
+  grid.className = "reasons-grid";
   grid.innerHTML = cfg.items
     .map(
       (r, i) => `
@@ -361,4 +376,8 @@ function escapeHtml(str) {
 }
 function escapeAttr(str) {
   return escapeHtml(str).replace(/"/g, "&quot;");
+}
+// escape HTML ก่อน แล้วค่อยแปลง **...** เป็นตัวเน้น (ปลอดภัยจาก HTML injection)
+function formatEmphasis(str) {
+  return escapeHtml(str).replace(/\*\*(.+?)\*\*/g, '<strong class="reason-em">$1</strong>');
 }

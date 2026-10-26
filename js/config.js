@@ -50,30 +50,28 @@ const CONFIG = {
   },
 
   /* ---------- เหตุผลที่รัก 💝 ----------
-   * title = หัวข้อสั้น ๆ ด้านหน้าการ์ด (คลิกเพื่อพลิก)
-   * text  = ข้อความเต็ม ใส่ยาวแค่ไหนก็ได้ การ์ดจะขยายตามอัตโนมัติ
+   * style: "prose" = แสดงเป็นจดหมายยาวต่อเนื่อง (ใช้ paragraphs)
+   *        "cards" = แสดงเป็นการ์ดพลิกได้ (ใช้ items: [{title, text}])
    */
   reasons: {
-    heading: "เหตุผลที่รักเธอ 💝",
-    subheading: "คลิกการ์ดเพื่อเปิดอ่าน",
-    items: [
-      {
-        title: "รอยยิ้มของเธอ",
-        text: "ทุกครั้งที่เธอยิ้ม มันเหมือนโลกทั้งใบสว่างขึ้น ไม่ว่าวันนั้นจะเหนื่อยแค่ไหน แค่เห็นเธอยิ้มก็หายเหนื่อยเป็นปลิดทิ้ง",
-      },
-      {
-        title: "ความอบอุ่น",
-        text: "เธอคือที่ที่ทำให้ฉันรู้สึกปลอดภัยที่สุด เวลาอยู่กับเธอ ฉันเป็นตัวของตัวเองได้เต็มที่โดยไม่ต้องกลัวอะไรเลย",
-      },
-      {
-        title: "การอยู่เคียงข้าง",
-        text: "ขอบคุณที่อยู่ข้าง ๆ กันทั้งในวันที่ดีและวันที่แย่ ขอบคุณที่ไม่เคยปล่อยมือ และพร้อมจะเดินไปด้วยกันเสมอ ไม่ว่าทางข้างหน้าจะเป็นอย่างไร ฉันก็รู้ว่าถ้ามีเธออยู่ด้วยกัน เราจะผ่านมันไปได้",
-      },
-      {
-        title: "เสียงหัวเราะ",
-        text: "เสียงหัวเราะของเธอคือเพลงที่ฉันชอบที่สุด อยากทำให้เธอหัวเราะแบบนี้ไปอีกนาน ๆ",
-      },
+    style: "prose",
+    heading: "Reasons Why I Love You 💝",
+    subheading: "",
+    // ข้อความจดหมายยาว — แต่ละย่อหน้าคั่นด้วยคอมมา
+    // ใส่ "**...**" รอบประโยคที่ต้องการเน้น (จะกลายเป็นตัวหนาสีชมพู)
+    paragraphs: [
+      "I love you for who you are, not just for the person you show the world, but also for the person you are when no one is watching.",
+      "I love the way you think, the way you care, the way you carry your responsibilities, and the strength you show even on days when life feels heavy.",
+      "I love you not because you are perfect, but because you are human. You have your own fears, flaws, struggles, and moments of uncertainty. And I want you to know that you don't have to be strong all the time to be loved by me.",
+      "I love the little things about you, the moments we share, the conversations that stay with me, and even the ordinary days that become meaningful simply because I get to spend them with you.",
+      "I love you because being with you has taught me that love is more than a feeling. It is patience, understanding, honesty, forgiveness, and the willingness to keep learning how to love each other better.",
+      "And perhaps, one of the biggest reasons I love you is this: I want to be someone who makes your life a little lighter, your difficult days a little easier, and your happiest moments even more beautiful.",
+      "I cannot promise that I will always get everything right. But I can promise that I want to keep growing, keep understanding you, and keep becoming someone who loves you in the ways you deserve to be loved.",
+      "**I love you not only for who you are, but also for who I become when I choose to love you.**",
+      "And after two years, through all the beautiful moments and the lessons we have learned, my heart still finds reasons to choose you.",
     ],
+    // ใช้เมื่อ style = "cards"
+    items: [],
   },
 
   /* ---------- แกลเลอรีรูปภาพ 🖼️ ----------
