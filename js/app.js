@@ -131,10 +131,18 @@ function renderLetter() {
 /* ---------- เพลงประกอบ ---------- */
 function setupMusic() {
   const cfg = CONFIG.music;
-  if (!cfg.src) return;
-
-  const audio = document.getElementById("bgMusic");
   const btn = document.getElementById("musicToggle");
+
+  // กรณีที่ 1: เล่นเพลงจาก YouTube
+  if (cfg.youtubeId) {
+    btn.hidden = false;
+    setupYouTubeMusic(cfg.youtubeId, btn);
+    return;
+  }
+
+  // กรณีที่ 2: เล่นไฟล์เสียงปกติ (mp3)
+  if (!cfg.src) return;
+  const audio = document.getElementById("bgMusic");
   audio.src = cfg.src;
   btn.hidden = false;
 
@@ -148,6 +156,42 @@ function setupMusic() {
       btn.classList.add("playing");
     }
     playing = !playing;
+  });
+}
+
+/* ---------- เล่นเพลงจาก YouTube ผ่าน IFrame API ---------- */
+let ytReady = false;
+let ytPlayer = null;
+let ytPlaying = false;
+
+function setupYouTubeMusic(videoId, btn) {
+  // โหลดสคริปต์ YouTube IFrame API
+  const tag = document.createElement("script");
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(tag);
+
+  window.onYouTubeIframeAPIReady = function () {
+    ytPlayer = new YT.Player("ytPlayer", {
+      height: "0",
+      width: "0",
+      videoId: videoId,
+      playerVars: { autoplay: 0, loop: 1, playlist: videoId, playsinline: 1 },
+      events: {
+        onReady: () => { ytReady = true; },
+      },
+    });
+  };
+
+  btn.addEventListener("click", () => {
+    if (!ytReady || !ytPlayer) return;
+    if (ytPlaying) {
+      ytPlayer.pauseVideo();
+      btn.classList.remove("playing");
+    } else {
+      ytPlayer.playVideo();
+      btn.classList.add("playing");
+    }
+    ytPlaying = !ytPlaying;
   });
 }
 

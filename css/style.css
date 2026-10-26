@@ -64,6 +64,15 @@ body {
 .music-toggle.playing .music-icon { animation: spin 3s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* ซ่อนตัวเล่น YouTube ไว้ (เล่นเฉพาะเสียงพื้นหลัง) */
+#ytPlayer {
+  position: fixed;
+  width: 1px; height: 1px;
+  left: -9999px; top: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* ===================== HERO ===================== */
 .hero {
   position: relative;
