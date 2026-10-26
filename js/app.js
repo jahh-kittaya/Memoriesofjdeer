@@ -31,6 +31,13 @@ function setupIntro() {
   if (cfg.subtitle) document.getElementById("introSub").textContent = cfg.subtitle;
   if (cfg.buttonText) btn.textContent = cfg.buttonText;
 
+  // ไอคอนกลางหน้า intro: ใช้รูปถ้ามี ไม่งั้นใช้อีโมจิ
+  if (cfg.iconImage) {
+    gift.innerHTML = `<img src="${cfg.iconImage}" alt="intro" class="intro-gift-img" />`;
+  } else if (cfg.icon) {
+    gift.textContent = cfg.icon;
+  }
+
   const open = () => {
     if (intro.classList.contains("opening")) return;
     intro.classList.add("opening");
