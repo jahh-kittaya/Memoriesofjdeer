@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>วันครบรอบ 2 ปี 💖</title>
+  <meta name="description" content="เว็บฉลองวันครบรอบความรัก 2 ปี" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- หัวใจลอยพื้นหลัง -->
+  <div class="hearts-bg" id="heartsBg" aria-hidden="true"></div>
+
+  <!-- ปุ่มเปิด/ปิดเพลง -->
+  <button class="music-toggle" id="musicToggle" title="เปิด/ปิดเพลง" hidden>
+    <span class="music-icon">🎵</span>
+  </button>
+  <audio id="bgMusic" loop></audio>
+
+  <!-- ===================== HERO ===================== -->
+  <header class="hero" id="hero">
+    <div class="hero-inner">
+      <p class="hero-badge" id="heroBadge">💑 Our Anniversary</p>
+      <h1 class="hero-title" id="heroTitle"></h1>
+      <p class="hero-subtitle" id="heroSubtitle"></p>
+
+      <!-- ตัวนับเวลา count-up -->
+      <div class="counter" id="counter">
+        <div class="counter-box"><span class="num" data-k="years">0</span><span class="lbl">ปี</span></div>
+        <div class="counter-box"><span class="num" data-k="months">0</span><span class="lbl">เดือน</span></div>
+        <div class="counter-box"><span class="num" data-k="days">0</span><span class="lbl">วัน</span></div>
+        <div class="counter-box"><span class="num" data-k="totalDays">0</span><span class="lbl">วันรวม</span></div>
+      </div>
+
+      <!-- นับถอยหลังครบรอบถัดไป -->
+      <div class="countdown" id="countdown">
+        <p class="countdown-label">⏳ อีก <strong id="cdDays">–</strong> วัน ถึงวันครบรอบปีถัดไป</p>
+      </div>
+
+      <a href="#timeline" class="scroll-hint">เลื่อนลงดูเรื่องราวของเรา ↓</a>
+    </div>
+  </header>
+
+  <!-- ===================== TIMELINE ===================== -->
+  <section class="section" id="timeline">
+    <h2 class="section-title">📅 ไทม์ไลน์ความทรงจำ</h2>
+    <div class="timeline" id="timelineList"></div>
+  </section>
+
+  <!-- ===================== GALLERY ===================== -->
+  <section class="section" id="gallery">
+    <h2 class="section-title">🖼️ แกลเลอรีความทรงจำ</h2>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </section>
+
+  <!-- ===================== LETTER ===================== -->
+  <section class="section letter-section" id="letter">
+    <div class="letter-card">
+      <h2 class="letter-title" id="letterTitle"></h2>
+      <div class="letter-body" id="letterBody"></div>
+      <p class="letter-sign" id="letterSign"></p>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer">
+    <p>สร้างด้วย ❤️ สำหรับวันครบรอบของเรา</p>
+  </footer>
+
+  <!-- Lightbox แสดงรูปใหญ่ -->
+  <div class="lightbox" id="lightbox" hidden>
+    <span class="lightbox-close" id="lightboxClose">&times;</span>
+    <img id="lightboxImg" src="" alt="" />
+    <p class="lightbox-caption" id="lightboxCaption"></p>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
