@@ -48,6 +48,13 @@ body.intro-locked { overflow: hidden; }
   animation: giftBounce 1.6s ease-in-out infinite;
 }
 .intro-gift.pop { animation: giftPop 0.8s ease forwards; }
+.intro-gift-img {
+  width: clamp(120px, 34vw, 200px);
+  height: auto;
+  border-radius: 24px;
+  display: block;
+  pointer-events: none;
+}
 .intro-title {
   font-family: "Dancing Script", "Kanit", cursive;
   font-size: clamp(2.2rem, 8vw, 4rem);
