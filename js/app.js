@@ -4,6 +4,7 @@
  * ===================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+  renderBackground();
   renderHero();
   renderCounter();
   startCountdown();
@@ -14,6 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
   setupLightbox();
   spawnHearts();
 });
+
+/* ---------- ภาพพื้นหลัง ---------- */
+function renderBackground() {
+  const cfg = CONFIG.background;
+  if (!cfg || !cfg.image) return;
+  const el = document.getElementById("bgImage");
+  el.style.backgroundImage = `url("${cfg.image}")`;
+  el.style.opacity = cfg.opacity != null ? cfg.opacity : 0.12;
+}
 
 /* ---------- HERO ---------- */
 function renderHero() {
