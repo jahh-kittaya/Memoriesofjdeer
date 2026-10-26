@@ -18,6 +18,15 @@ const CONFIG = {
     subtitle: "Kittaya ❤️ Thanida · 24 · XI · MMXXVI",
   },
 
+  /* ---------- ภาพพื้นหลัง ----------
+   * ใส่ path รูปในโฟลเดอร์ images/ หรือ URL รูป
+   * เว้นว่าง "" ถ้าไม่ต้องการภาพพื้นหลัง
+   */
+  background: {
+    image: "images/logo.png",
+    opacity: 0.12,   // ความเข้มของภาพพื้นหลัง (0 = จาง, 1 = เต็ม)
+  },
+
   /* ---------- จดหมายรัก 💌 ---------- */
   letter: {
     title: "Two Years of Us",

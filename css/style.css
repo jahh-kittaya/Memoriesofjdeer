@@ -24,6 +24,18 @@ body {
   line-height: 1.6;
 }
 
+/* ===================== ภาพพื้นหลัง ===================== */
+.bg-image {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: min(620px, 80vw);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
 /* ===================== หัวใจลอยพื้นหลัง ===================== */
 .hearts-bg {
   position: fixed;
