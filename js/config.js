@@ -16,6 +16,8 @@ const CONFIG = {
   hero: {
     title: "Two Years of Us",
     subtitle: "Kittaya ❤️ Thanida · 24 · XI · MMXXVI",
+    // รูปคู่บนหัวเว็บ — ใส่ path เช่น "images/couple.png" หรือเว้นว่าง "" ถ้าไม่ต้องการ
+    photo: "images/couple.png",
   },
 
   /* ---------- หน้า intro (คลิกเพื่อเปิด) ---------- */

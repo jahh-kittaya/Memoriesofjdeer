@@ -72,6 +72,13 @@ function renderHero() {
   document.getElementById("heroTitle").textContent = CONFIG.hero.title;
   document.getElementById("heroSubtitle").textContent = CONFIG.hero.subtitle;
   document.title = CONFIG.hero.title;
+
+  // รูปคู่บนหัวเว็บ (ถ้ามี)
+  if (CONFIG.hero.photo) {
+    const wrap = document.getElementById("heroPhotoWrap");
+    document.getElementById("heroPhoto").src = CONFIG.hero.photo;
+    wrap.hidden = false;
+  }
 }
 
 /* ---------- ตัวนับเวลา count-up (ปี/เดือน/วัน + วันรวม) ---------- */
