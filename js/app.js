@@ -3,6 +3,9 @@
  *  อ่านข้อมูลจาก CONFIG ใน config.js
  * ===================================================================== */
 
+// ฟังก์ชันเริ่มเล่นเพลง (ตั้งค่าโดย setupMusic) ให้ปุ่ม intro เรียกได้
+let startMusicFn = null;
+
 document.addEventListener("DOMContentLoaded", () => {
   renderBackground();
   renderHero();
@@ -14,7 +17,38 @@ document.addEventListener("DOMContentLoaded", () => {
   setupMusic();
   setupLightbox();
   spawnHearts();
+  setupIntro();
 });
+
+/* ---------- หน้า intro "คลิกเพื่อเปิด" ---------- */
+function setupIntro() {
+  const intro = document.getElementById("intro");
+  const btn = document.getElementById("introBtn");
+  const gift = document.getElementById("introGift");
+  const cfg = CONFIG.intro || {};
+
+  if (cfg.title) document.getElementById("introTitle").textContent = cfg.title;
+  if (cfg.subtitle) document.getElementById("introSub").textContent = cfg.subtitle;
+  if (cfg.buttonText) btn.textContent = cfg.buttonText;
+
+  const open = () => {
+    if (intro.classList.contains("opening")) return;
+    intro.classList.add("opening");
+    gift.classList.add("pop");
+    // เริ่มเพลงทันที (ผู้ใช้กดคลิกแล้ว เบราว์เซอร์จึงอนุญาต)
+    if (typeof startMusicFn === "function") startMusicFn();
+    // เริ่มเอฟเฟกต์พิมพ์ดีดที่คำคม
+    startLetterTyping();
+    setTimeout(() => {
+      intro.style.display = "none";
+      document.body.classList.remove("intro-locked");
+    }, 900);
+  };
+
+  document.body.classList.add("intro-locked");
+  btn.addEventListener("click", open);
+  gift.addEventListener("click", open);
+}
 
 /* ---------- ภาพพื้นหลัง ---------- */
 function renderBackground() {
@@ -132,10 +166,51 @@ function renderGallery() {
 /* ---------- จดหมายรัก ---------- */
 function renderLetter() {
   document.getElementById("letterTitle").textContent = CONFIG.letter.title;
+  // สร้างย่อหน้าว่างไว้ก่อน แล้วค่อยพิมพ์ทีละตัวด้วย startLetterTyping()
   document.getElementById("letterBody").innerHTML = CONFIG.letter.paragraphs
-    .map((p) => `<p>${escapeHtml(p)}</p>`)
+    .map(() => `<p class="type-line"></p>`)
     .join("");
   document.getElementById("letterSign").textContent = CONFIG.letter.signature;
+
+  // เผื่อกรณีผู้ใช้เลื่อนมาถึงจดหมายโดยไม่ผ่านปุ่ม intro → เริ่มพิมพ์เมื่อมองเห็น
+  const letterSec = document.getElementById("letter");
+  const io = new IntersectionObserver((entries) => {
+    if (entries.some((e) => e.isIntersecting)) {
+      startLetterTyping();
+      io.disconnect();
+    }
+  }, { threshold: 0.4 });
+  io.observe(letterSec);
+}
+
+/* ---------- เอฟเฟกต์พิมพ์ดีดที่คำคม ---------- */
+let letterTyped = false;
+function startLetterTyping() {
+  if (letterTyped) return;
+  letterTyped = true;
+
+  const lines = Array.from(document.querySelectorAll("#letterBody .type-line"));
+  const texts = CONFIG.letter.paragraphs;
+  let li = 0;
+
+  function typeLine() {
+    if (li >= lines.length) return;
+    const el = lines[li];
+    const text = texts[li];
+    el.classList.add("typing");
+    let ci = 0;
+    const timer = setInterval(() => {
+      el.textContent = text.slice(0, ci + 1);
+      ci++;
+      if (ci >= text.length) {
+        clearInterval(timer);
+        el.classList.remove("typing");
+        li++;
+        setTimeout(typeLine, 400); // หน่วงก่อนขึ้นบรรทัดถัดไป
+      }
+    }, 55); // ความเร็วพิมพ์ (มิลลิวินาที/ตัวอักษร)
+  }
+  typeLine();
 }
 
 /* ---------- เพลงประกอบ ---------- */
@@ -157,16 +232,10 @@ function setupMusic() {
   btn.hidden = false;
 
   let playing = false;
-  btn.addEventListener("click", () => {
-    if (playing) {
-      audio.pause();
-      btn.classList.remove("playing");
-    } else {
-      audio.play().catch(() => {});
-      btn.classList.add("playing");
-    }
-    playing = !playing;
-  });
+  const play = () => { audio.play().catch(() => {}); btn.classList.add("playing"); playing = true; };
+  const pause = () => { audio.pause(); btn.classList.remove("playing"); playing = false; };
+  startMusicFn = play; // ให้ปุ่ม intro เริ่มเพลงได้
+  btn.addEventListener("click", () => (playing ? pause() : play()));
 }
 
 /* ---------- เล่นเพลงจาก YouTube ผ่าน IFrame API ---------- */
@@ -192,17 +261,11 @@ function setupYouTubeMusic(videoId, btn) {
     });
   };
 
-  btn.addEventListener("click", () => {
-    if (!ytReady || !ytPlayer) return;
-    if (ytPlaying) {
-      ytPlayer.pauseVideo();
-      btn.classList.remove("playing");
-    } else {
-      ytPlayer.playVideo();
-      btn.classList.add("playing");
-    }
-    ytPlaying = !ytPlaying;
-  });
+  const playYt = () => { if (ytReady && ytPlayer) { ytPlayer.playVideo(); btn.classList.add("playing"); ytPlaying = true; } };
+  const pauseYt = () => { if (ytPlayer) { ytPlayer.pauseVideo(); btn.classList.remove("playing"); ytPlaying = false; } };
+  startMusicFn = playYt; // ให้ปุ่ม intro เริ่มเพลงได้
+
+  btn.addEventListener("click", () => (ytPlaying ? pauseYt() : playYt()));
 }
 
 /* ---------- Lightbox ---------- */
