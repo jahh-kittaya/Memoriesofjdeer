@@ -18,6 +18,13 @@ const CONFIG = {
     subtitle: "Kittaya ❤️ Thanida · 24 · XI · MMXXVI",
   },
 
+  /* ---------- หน้า intro (คลิกเพื่อเปิด) ---------- */
+  intro: {
+    title: "Two Years of Us",
+    subtitle: "คลิกเพื่อเปิดของขวัญของเรา 💝",
+    buttonText: "เปิด 💕",
+  },
+
   /* ---------- ภาพพื้นหลัง ----------
    * ใส่ path รูปในโฟลเดอร์ images/ หรือ URL รูป
    * เว้นว่าง "" ถ้าไม่ต้องการภาพพื้นหลัง
