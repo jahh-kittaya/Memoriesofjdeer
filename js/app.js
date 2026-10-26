@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderCounter();
   startCountdown();
   renderTimeline();
+  renderReasons();
   renderGallery();
   renderLetter();
   setupMusic();
@@ -154,6 +155,46 @@ function renderTimeline() {
       </div>`
     )
     .join("");
+}
+
+/* ---------- เหตุผลที่รัก (การ์ดพลิกได้) ---------- */
+function renderReasons() {
+  const cfg = CONFIG.reasons;
+  const section = document.getElementById("reasons");
+  if (!cfg || !cfg.items || !cfg.items.length) {
+    if (section) section.style.display = "none";
+    return;
+  }
+
+  if (cfg.heading) document.getElementById("reasonsHeading").textContent = cfg.heading;
+  document.getElementById("reasonsSub").textContent = cfg.subheading || "";
+
+  const grid = document.getElementById("reasonsGrid");
+  grid.innerHTML = cfg.items
+    .map(
+      (r, i) => `
+      <div class="reason-card" style="animation-delay:${i * 0.07}s" tabindex="0" role="button" aria-label="เปิดอ่านเหตุผล">
+        <div class="reason-inner">
+          <div class="reason-front">
+            <span class="reason-no">${i + 1}</span>
+            <span class="reason-title">${escapeHtml(r.title || "เหตุผลที่รัก")}</span>
+            <span class="reason-hint">คลิกเพื่อเปิด 💗</span>
+          </div>
+          <div class="reason-back">
+            <p>${escapeHtml(r.text || "")}</p>
+          </div>
+        </div>
+      </div>`
+    )
+    .join("");
+
+  grid.querySelectorAll(".reason-card").forEach((card) => {
+    const toggle = () => card.classList.toggle("flipped");
+    card.addEventListener("click", toggle);
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+    });
+  });
 }
 
 /* ---------- แกลเลอรี ---------- */
