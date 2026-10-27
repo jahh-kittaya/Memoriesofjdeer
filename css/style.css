@@ -371,12 +371,16 @@ body.intro-locked { overflow: hidden; }
 .leaf-l { left: -18px; top: 40%; transform: rotate(18deg); border-radius: 60% 0 60% 0; }
 .leaf-r { right: -18px; top: 60%; transform: rotate(-18deg); }
 
-/* โทนสีดอกทิวลิป */
-.t-pink   .petal { background: linear-gradient(#ff9ec4, #ff6fa6); }
-.t-rose   .petal { background: linear-gradient(#ff85a1, #e8457a); }
-.t-purple .petal { background: linear-gradient(#c79bf0, #a06cd5); }
-.t-peach  .petal { background: linear-gradient(#ffc39b, #ff9d6c); }
-.t-red    .petal { background: linear-gradient(#ff8a8a, #ef5b5b); }
+/* โทนสีดอกทิวลิป — สีขาวทั้งหมด (ไล่เฉดอ่อน + ขอบชมพูจาง ให้มีมิติ) */
+.t-pink   .petal,
+.t-rose   .petal,
+.t-purple .petal,
+.t-peach  .petal,
+.t-red    .petal {
+  background: linear-gradient(#ffffff, #ffeef4);
+  border: 1px solid rgba(255, 170, 200, 0.45);
+  box-shadow: inset 0 -6px 10px rgba(255, 190, 215, 0.35);
+}
 
 .tulip.active .tulip-bloom { animation: popBloom 0.5s ease; }
 @keyframes popBloom {
