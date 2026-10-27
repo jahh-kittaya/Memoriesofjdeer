@@ -165,55 +165,64 @@ function renderGarden() {
   const useImage = !!cfg.flowerImage;
   const tulipColors = ["t-pink", "t-rose", "t-purple", "t-peach", "t-red"];
 
-  field.innerHTML = cfg.flowers
+  const n = cfg.flowers.length;
+  const mid = (n - 1) / 2; // ดัชนีกลาง สำหรับคำนวณมุมกางออกเป็นช่อ
+
+  const flowersHtml = cfg.flowers
     .map((f, i) => {
       const attrs = `data-title="${escapeAttr(f.title || "")}" data-text="${escapeAttr(f.text || "")}" aria-label="${escapeAttr(f.title || "ดอกไม้")}"`;
+      const offset = i - mid;                 // ระยะจากกลาง (- ซ้าย, + ขวา)
+      const angle = (offset * 11).toFixed(1); // มุมกางของก้านในช่อ
+      const styleVars = `--angle:${angle}deg; --delay:${(i * 0.12).toFixed(2)}s`;
 
       // โหมดรูปจริง
       if (useImage) {
         return `
-      <button class="tulip tulip-img" style="animation-delay:${i * 0.2}s" ${attrs}>
+      <button class="bq-flower tulip-img" style="${styleVars}" ${attrs}>
         <img src="${escapeAttr(cfg.flowerImage)}" alt="${escapeAttr(f.title || "ดอกไม้")}" />
       </button>`;
       }
 
       // โหมดดอกวาด CSS (สำรอง)
       const color = tulipColors[i % tulipColors.length];
-      const stemH = 70 + ((i % 3) * 18);
       return `
-      <button class="tulip ${color}" style="animation-delay:${i * 0.25}s" ${attrs}>
+      <button class="bq-flower tulip ${color}" style="${styleVars}" ${attrs}>
         <span class="tulip-bloom">
           <span class="petal petal-l"></span>
           <span class="petal petal-c"></span>
           <span class="petal petal-r"></span>
         </span>
-        <span class="tulip-stem" style="height:${stemH}px">
-          <span class="leaf leaf-l"></span>
-          <span class="leaf leaf-r"></span>
-        </span>
       </button>`;
     })
     .join("");
+
+  // ห่อดอกทั้งหมดเป็น "ช่อ" + ก้านรวม + โบว์
+  field.innerHTML = `
+    <div class="bouquet">
+      <div class="bq-flowers">${flowersHtml}</div>
+      <div class="bq-wrap"></div>
+      <div class="bq-ribbon">🎀</div>
+    </div>`;
 
   // คลิกดอก → popup
   const popup = document.getElementById("flowerPopup");
   const pTitle = document.getElementById("flowerPopupTitle");
   const pText = document.getElementById("flowerPopupText");
 
-  field.querySelectorAll(".tulip").forEach((flower) => {
+  field.querySelectorAll(".bq-flower").forEach((flower) => {
     flower.addEventListener("click", (e) => {
       e.stopPropagation();
       pTitle.textContent = flower.dataset.title;
       pText.textContent = flower.dataset.text;
       popup.hidden = false;
-      field.querySelectorAll(".tulip").forEach((f) => f.classList.remove("active"));
+      field.querySelectorAll(".bq-flower").forEach((f) => f.classList.remove("active"));
       flower.classList.add("active");
     });
   });
 
   const closePopup = () => {
     popup.hidden = true;
-    field.querySelectorAll(".tulip").forEach((f) => f.classList.remove("active"));
+    field.querySelectorAll(".bq-flower").forEach((f) => f.classList.remove("active"));
   };
   document.getElementById("flowerPopupClose").addEventListener("click", closePopup);
   section.addEventListener("click", (e) => {
