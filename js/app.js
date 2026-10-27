@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderHero();
   renderCounter();
   startCountdown();
-  renderStats();
+  renderConstellation();
   renderReasons();
   renderGallery();
   renderLetter();
@@ -149,38 +149,89 @@ function startCountdown() {
   }
 }
 
-/* ---------- สถิติความรัก ---------- */
-function renderStats() {
-  const cfg = CONFIG.stats;
-  const section = document.getElementById("stats");
-  if (!cfg || !cfg.items || !cfg.items.length) {
+/* ---------- ดวงดาวของเรา (Constellation) ---------- */
+// พิกัดดาว 8 ดวง (เป็น %) เรียงเป็นรูปหัวใจ ❤️ และลำดับเส้นเชื่อม
+const HEART_POINTS = [
+  { x: 50, y: 30 },  // 0 — ยอดกลางหัวใจ (ร่องบน)
+  { x: 34, y: 18 },  // 1 — โค้งซ้ายบน
+  { x: 20, y: 30 },  // 2 — ซ้ายบนสุด
+  { x: 24, y: 52 },  // 3 — ซ้ายล่าง
+  { x: 50, y: 78 },  // 4 — ปลายแหลมล่าง
+  { x: 76, y: 52 },  // 5 — ขวาล่าง
+  { x: 80, y: 30 },  // 6 — ขวาบนสุด
+  { x: 66, y: 18 },  // 7 — โค้งขวาบน
+];
+// ลำดับเชื่อมเส้นให้เป็นรูปหัวใจต่อเนื่อง (วนกลับมาจุดเริ่ม)
+const HEART_PATH = [1, 2, 3, 4, 5, 6, 7, 0];
+
+function renderConstellation() {
+  const cfg = CONFIG.constellation;
+  const section = document.getElementById("constellation");
+  if (!cfg || !cfg.stars || !cfg.stars.length) {
     if (section) section.style.display = "none";
     return;
   }
 
-  if (cfg.heading) document.getElementById("statsHeading").textContent = cfg.heading;
+  if (cfg.heading) document.getElementById("constHeading").textContent = cfg.heading;
+  document.getElementById("constSub").textContent = cfg.subheading || "";
 
-  // จำนวนวันที่อยู่ด้วยกัน (ใช้ค่าเดียวกับตัวนับ)
-  const totalDays = Math.max(0, Math.floor((new Date() - getStartDate()) / 86400000));
+  const starsWrap = document.getElementById("skyStars");
+  const linesSvg = document.getElementById("skyLines");
 
-  const grid = document.getElementById("statsGrid");
-  grid.innerHTML = cfg.items
-    .map((s, i) => {
-      const isAuto = s.value === "auto-days";
-      const display = isAuto ? "0" : s.value;
-      return `
-      <div class="stat-card" style="animation-delay:${i * 0.08}s">
-        <span class="stat-emoji">${s.emoji || "💗"}</span>
-        <span class="stat-value" data-auto="${isAuto ? totalDays : ""}">${escapeHtml(String(display))}</span>
-        <span class="stat-label">${escapeHtml(s.label || "")}</span>
-      </div>`;
-    })
-    .join("");
+  // 1) ดาวพื้นหลังกระพริบแบบสุ่ม
+  let bgStars = "";
+  for (let i = 0; i < 70; i++) {
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
+    const size = 1 + Math.random() * 2;
+    const delay = (Math.random() * 3).toFixed(2);
+    bgStars += `<span class="bg-star" style="left:${x}%;top:${y}%;width:${size}px;height:${size}px;animation-delay:${delay}s"></span>`;
+  }
 
-  // อนิเมชันนับเลขสำหรับการ์ดที่คำนวณจำนวนวันอัตโนมัติ
-  grid.querySelectorAll(".stat-value[data-auto]").forEach((el) => {
-    const target = parseInt(el.dataset.auto, 10);
-    if (!isNaN(target)) animateNumber(el, target);
+  // 2) เส้นเชื่อมดาว (รูปหัวใจ) ด้วย SVG polyline
+  const pts = HEART_PATH.map((idx) => `${HEART_POINTS[idx].x},${HEART_POINTS[idx].y}`);
+  // เริ่มจากจุดแรก (0) แล้วตามลำดับ
+  const allPts = [`${HEART_POINTS[0].x},${HEART_POINTS[0].y}`, ...pts].join(" ");
+  linesSvg.innerHTML = `<polyline points="${allPts}" class="const-line" />`;
+
+  // 3) ดาวหลัก (คลิกได้) ตามพิกัดหัวใจ
+  let mainStars = "";
+  HEART_POINTS.forEach((p, i) => {
+    const data = cfg.stars[i];
+    if (!data) return; // ถ้าข้อความไม่ครบ ก็ข้ามดาวดวงนั้น
+    mainStars += `
+      <button class="main-star" style="left:${p.x}%;top:${p.y}%;animation-delay:${i * 0.15}s"
+              data-title="${escapeAttr(data.title || "")}" data-text="${escapeAttr(data.text || "")}"
+              aria-label="${escapeAttr(data.title || "ดาว")}">
+        <span class="main-star-dot"></span>
+      </button>`;
+  });
+
+  starsWrap.innerHTML = bgStars + mainStars;
+
+  // 4) คลิกดาว → แสดง popup
+  const popup = document.getElementById("starPopup");
+  const pTitle = document.getElementById("starPopupTitle");
+  const pText = document.getElementById("starPopupText");
+
+  starsWrap.querySelectorAll(".main-star").forEach((star) => {
+    star.addEventListener("click", (e) => {
+      e.stopPropagation();
+      pTitle.textContent = star.dataset.title;
+      pText.textContent = star.dataset.text;
+      popup.hidden = false;
+      starsWrap.querySelectorAll(".main-star").forEach((s) => s.classList.remove("active"));
+      star.classList.add("active");
+    });
+  });
+
+  const closePopup = () => {
+    popup.hidden = true;
+    starsWrap.querySelectorAll(".main-star").forEach((s) => s.classList.remove("active"));
+  };
+  document.getElementById("starPopupClose").addEventListener("click", closePopup);
+  document.getElementById("sky").addEventListener("click", (e) => {
+    if (e.target.id === "sky" || e.target.id === "skyStars" || e.target.id === "skyLines") closePopup();
   });
 }
 

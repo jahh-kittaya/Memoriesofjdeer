@@ -69,14 +69,24 @@
         <p class="countdown-label">⏳ อีก <strong id="cdDays">–</strong> วัน ถึงวันครบรอบปีถัดไป</p>
       </div>
 
-      <a href="#stats" class="scroll-hint">เลื่อนลงดูเรื่องราวของเรา ↓</a>
+      <a href="#constellation" class="scroll-hint">เลื่อนลงดูเรื่องราวของเรา ↓</a>
     </div>
   </header>
 
-  <!-- ===================== LOVE STATS ===================== -->
-  <section class="section" id="stats">
-    <h2 class="section-title" id="statsHeading">📊 สถิติความรักของเรา</h2>
-    <div class="stats-grid" id="statsGrid"></div>
+  <!-- ===================== CONSTELLATION ===================== -->
+  <section class="section section-sky" id="constellation">
+    <h2 class="section-title sky-title" id="constHeading">🌟 ดวงดาวของเรา</h2>
+    <p class="const-sub" id="constSub"></p>
+    <div class="sky" id="sky">
+      <svg class="sky-lines" id="skyLines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <div class="sky-stars" id="skyStars"></div>
+      <!-- popup ข้อความเมื่อคลิกดาว -->
+      <div class="star-popup" id="starPopup" hidden>
+        <button class="star-popup-close" id="starPopupClose" aria-label="ปิด">&times;</button>
+        <h3 class="star-popup-title" id="starPopupTitle"></h3>
+        <p class="star-popup-text" id="starPopupText"></p>
+      </div>
+    </div>
   </section>
 
   <!-- ===================== REASONS ===================== -->
