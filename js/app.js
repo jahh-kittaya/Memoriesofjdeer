@@ -149,6 +149,65 @@ function startCountdown() {
   }
 }
 
+/* ---------- โหมดช่อภาพ: จุดหัวใจทับบนรูปช่อ ---------- */
+// พิกัดจุดหัวใจ (% ของกรอบภาพ) วางกระจายบนบริเวณดอกทิวลิปของรูปช่อ
+// ครอบคลุมได้ถึง 24 จุด — ถ้าข้อความน้อยกว่า จะใช้เท่าที่มี
+const BOUQUET_SPOTS = [
+  {x:44,y:17},{x:57,y:18},{x:36,y:22},{x:50,y:24},{x:64,y:23},
+  {x:29,y:28},{x:43,y:29},{x:57,y:30},{x:71,y:29},{x:24,y:35},
+  {x:37,y:35},{x:50,y:36},{x:63,y:36},{x:76,y:35},{x:30,y:42},
+  {x:43,y:42},{x:57,y:43},{x:70,y:42},{x:36,y:49},{x:50,y:49},
+  {x:64,y:49},{x:43,y:55},{x:57,y:55},{x:50,y:60},
+];
+
+function renderBouquetPhoto(cfg, field, section) {
+  if (cfg.heading) document.getElementById("gardenHeading").textContent = cfg.heading;
+  document.getElementById("gardenSub").textContent = cfg.subheading || "";
+
+  const spots = cfg.flowers
+    .map((f, i) => {
+      const p = BOUQUET_SPOTS[i] || BOUQUET_SPOTS[BOUQUET_SPOTS.length - 1];
+      return `
+      <button class="bq-spot" style="left:${p.x}%;top:${p.y}%;--delay:${(i * 0.08).toFixed(2)}s"
+              data-title="${escapeAttr(f.title || "")}" data-text="${escapeAttr(f.text || "")}"
+              aria-label="${escapeAttr(f.title || "เรื่องเล่า")}">
+        <span class="bq-spot-heart">🤍</span>
+      </button>`;
+    })
+    .join("");
+
+  field.innerHTML = `
+    <div class="bq-photo">
+      <img class="bq-photo-img" src="${escapeAttr(cfg.bouquetImage)}" alt="ช่อดอกทิวลิป" />
+      <div class="bq-spots">${spots}</div>
+    </div>`;
+
+  // คลิกจุด → popup
+  const popup = document.getElementById("flowerPopup");
+  const pTitle = document.getElementById("flowerPopupTitle");
+  const pText = document.getElementById("flowerPopupText");
+
+  field.querySelectorAll(".bq-spot").forEach((spot) => {
+    spot.addEventListener("click", (e) => {
+      e.stopPropagation();
+      pTitle.textContent = spot.dataset.title;
+      pText.textContent = spot.dataset.text;
+      popup.hidden = false;
+      field.querySelectorAll(".bq-spot").forEach((s) => s.classList.remove("active"));
+      spot.classList.add("active");
+    });
+  });
+
+  const closePopup = () => {
+    popup.hidden = true;
+    field.querySelectorAll(".bq-spot").forEach((s) => s.classList.remove("active"));
+  };
+  document.getElementById("flowerPopupClose").addEventListener("click", closePopup);
+  section.addEventListener("click", (e) => {
+    if (e.target.id === "garden" || e.target.id === "gardenField") closePopup();
+  });
+}
+
 /* ---------- สวนดอกทิวลิป (Blooming Garden) ---------- */
 function renderGarden() {
   const cfg = CONFIG.garden;
@@ -162,6 +221,13 @@ function renderGarden() {
   document.getElementById("gardenSub").textContent = cfg.subheading || "";
 
   const field = document.getElementById("gardenField");
+
+  // ===== โหมดช่อภาพ: รูปช่อ 1 รูป + จุดหัวใจทับตามจำนวนข้อความ =====
+  if (cfg.bouquetImage) {
+    renderBouquetPhoto(cfg, field, section);
+    return;
+  }
+
   const useImage = !!cfg.flowerImage;
   const tulipColors = ["t-pink", "t-rose", "t-purple", "t-peach", "t-red"];
 
