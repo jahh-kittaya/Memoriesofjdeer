@@ -150,19 +150,30 @@ function startCountdown() {
 }
 
 /* ---------- ดวงดาวของเรา (Constellation) ---------- */
-// พิกัดดาว 8 ดวง (เป็น %) เรียงเป็นรูปหัวใจ ❤️ และลำดับเส้นเชื่อม
+// พิกัดดาว (เป็น %) เรียงเป็นตัวอักษร J D
+// ดาว 0-4 = ตัว J, ดาว 5-10 = ตัว D
 const HEART_POINTS = [
-  { x: 50, y: 30 },  // 0 — ยอดกลางหัวใจ (ร่องบน)
-  { x: 34, y: 18 },  // 1 — โค้งซ้ายบน
-  { x: 20, y: 30 },  // 2 — ซ้ายบนสุด
-  { x: 24, y: 52 },  // 3 — ซ้ายล่าง
-  { x: 50, y: 78 },  // 4 — ปลายแหลมล่าง
-  { x: 76, y: 52 },  // 5 — ขวาล่าง
-  { x: 80, y: 30 },  // 6 — ขวาบนสุด
-  { x: 66, y: 18 },  // 7 — โค้งขวาบน
+  // ---- ตัว J (ซ้าย) ----
+  { x: 18, y: 22 },  // 0 — หัว J บนซ้าย
+  { x: 40, y: 22 },  // 1 — หัว J บนขวา
+  { x: 31, y: 22 },  // 2 — กลางหัว J (ก้านลง)
+  { x: 31, y: 62 },  // 3 — ก้าน J ล่าง
+  { x: 15, y: 72 },  // 4 — ตะขอ J ซ้ายล่าง
+  // ---- ตัว D (ขวา) ----
+  { x: 58, y: 20 },  // 5 — มุมบน D
+  { x: 58, y: 78 },  // 6 — มุมล่าง D
+  { x: 74, y: 24 },  // 7 — โค้ง D บน
+  { x: 84, y: 40 },  // 8 — โค้ง D ขวาบน
+  { x: 84, y: 58 },  // 9 — โค้ง D ขวาล่าง
+  { x: 74, y: 74 },  // 10 — โค้ง D ล่าง
 ];
-// ลำดับเชื่อมเส้นให้เป็นรูปหัวใจต่อเนื่อง (วนกลับมาจุดเริ่ม)
-const HEART_PATH = [1, 2, 3, 4, 5, 6, 7, 0];
+// เส้นเชื่อมแยกตามตัวอักษร (คนละเส้น)
+const LETTER_PATHS = [
+  [0, 1],              // ขีดบนของ J
+  [2, 3, 4],           // ก้าน J + ตะขอ
+  [5, 6],              // ขีดตั้งของ D
+  [5, 7, 8, 9, 10, 6], // ส่วนโค้งของ D
+];
 
 function renderConstellation() {
   const cfg = CONFIG.constellation;
@@ -188,11 +199,11 @@ function renderConstellation() {
     bgStars += `<span class="bg-star" style="left:${x}%;top:${y}%;width:${size}px;height:${size}px;animation-delay:${delay}s"></span>`;
   }
 
-  // 2) เส้นเชื่อมดาว (รูปหัวใจ) ด้วย SVG polyline
-  const pts = HEART_PATH.map((idx) => `${HEART_POINTS[idx].x},${HEART_POINTS[idx].y}`);
-  // เริ่มจากจุดแรก (0) แล้วตามลำดับ
-  const allPts = [`${HEART_POINTS[0].x},${HEART_POINTS[0].y}`, ...pts].join(" ");
-  linesSvg.innerHTML = `<polyline points="${allPts}" class="const-line" />`;
+  // 2) เส้นเชื่อมดาว (ตัวอักษร J D) — วาดหลายเส้นแยกกัน
+  linesSvg.innerHTML = LETTER_PATHS.map((path, pi) => {
+    const pts = path.map((idx) => `${HEART_POINTS[idx].x},${HEART_POINTS[idx].y}`).join(" ");
+    return `<polyline points="${pts}" class="const-line" style="animation-delay:${0.4 + pi * 0.5}s" />`;
+  }).join("");
 
   // 3) ดาวหลัก (คลิกได้) ตามพิกัดหัวใจ
   let mainStars = "";
