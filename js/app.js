@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderHero();
   renderCounter();
   startCountdown();
-  renderTimeline();
+  renderStats();
   renderReasons();
   renderGallery();
   renderLetter();
@@ -149,19 +149,39 @@ function startCountdown() {
   }
 }
 
-/* ---------- ไทม์ไลน์ ---------- */
-function renderTimeline() {
-  const wrap = document.getElementById("timelineList");
-  wrap.innerHTML = CONFIG.timeline
-    .map(
-      (item, i) => `
-      <div class="timeline-item" data-emoji="${item.emoji || "💗"}" style="animation-delay:${i * 0.08}s">
-        <span class="timeline-date">${escapeHtml(item.date)}</span>
-        <h3>${escapeHtml(item.title)}</h3>
-        <p>${escapeHtml(item.desc || "")}</p>
-      </div>`
-    )
+/* ---------- สถิติความรัก ---------- */
+function renderStats() {
+  const cfg = CONFIG.stats;
+  const section = document.getElementById("stats");
+  if (!cfg || !cfg.items || !cfg.items.length) {
+    if (section) section.style.display = "none";
+    return;
+  }
+
+  if (cfg.heading) document.getElementById("statsHeading").textContent = cfg.heading;
+
+  // จำนวนวันที่อยู่ด้วยกัน (ใช้ค่าเดียวกับตัวนับ)
+  const totalDays = Math.max(0, Math.floor((new Date() - getStartDate()) / 86400000));
+
+  const grid = document.getElementById("statsGrid");
+  grid.innerHTML = cfg.items
+    .map((s, i) => {
+      const isAuto = s.value === "auto-days";
+      const display = isAuto ? "0" : s.value;
+      return `
+      <div class="stat-card" style="animation-delay:${i * 0.08}s">
+        <span class="stat-emoji">${s.emoji || "💗"}</span>
+        <span class="stat-value" data-auto="${isAuto ? totalDays : ""}">${escapeHtml(String(display))}</span>
+        <span class="stat-label">${escapeHtml(s.label || "")}</span>
+      </div>`;
+    })
     .join("");
+
+  // อนิเมชันนับเลขสำหรับการ์ดที่คำนวณจำนวนวันอัตโนมัติ
+  grid.querySelectorAll(".stat-value[data-auto]").forEach((el) => {
+    const target = parseInt(el.dataset.auto, 10);
+    if (!isNaN(target)) animateNumber(el, target);
+  });
 }
 
 /* ---------- เหตุผลที่รัก ---------- */
