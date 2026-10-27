@@ -320,48 +320,48 @@ body.intro-locked { overflow: hidden; }
 }
 .bq-flowers {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  z-index: 2;
+  width: clamp(240px, 70vw, 360px);
+  height: clamp(220px, 55vw, 300px);
 }
-/* ดอกแต่ละดอกในช่อ — กางเป็นรูปพัดจากโคน */
+/* ดอกแต่ละดอก — วางจากโคนร่วม (กลางล่าง) ซ้อนทับกันเหมือนช่อจริง */
 .bq-flower {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
   border: none;
   background: transparent;
   cursor: pointer;
   padding: 0;
-  margin: 0 -14px;                 /* ซ้อนเหลื่อมกันให้แน่นเหมือนช่อ */
   transform-origin: bottom center;
-  transform: rotate(var(--angle, 0deg));
+  /* ขยับออกข้าง + เอียง + ยกเตี้ยลงตามระยะจากกลาง + ย่อเล็กน้อย */
+  transform: translateX(-50%) translateX(var(--x,0)) translateY(var(--y,0)) rotate(var(--angle,0deg)) scale(var(--s,1));
   animation: flowerIn 0.6s ease both;
   animation-delay: var(--delay, 0s);
 }
 @keyframes flowerIn {
-  from { opacity: 0; transform: rotate(var(--angle,0deg)) translateY(20px) scale(0.5); }
-  to   { opacity: 1; transform: rotate(var(--angle,0deg)) translateY(0) scale(1); }
+  from { opacity: 0; transform: translateX(-50%) translateX(var(--x,0)) translateY(40px) rotate(var(--angle,0deg)) scale(0.4); }
+  to   { opacity: 1; transform: translateX(-50%) translateX(var(--x,0)) translateY(var(--y,0)) rotate(var(--angle,0deg)) scale(var(--s,1)); }
 }
-.bq-flower:hover { z-index: 5; }
-.bq-flower:hover img,
-.bq-flower:hover .tulip-bloom { transform: scale(1.1) translateY(-6px); }
-.bq-flower.active { z-index: 6; }
+.bq-flower:hover { z-index: 20 !important; }
+.bq-flower.active { z-index: 21 !important; }
 
-/* ก้านช่อรวม (กรวยสีเขียวที่โคน) */
+/* กระดาษห่อช่อ (กรวยที่โคน) */
 .bq-wrap {
-  width: 70px;
-  height: 90px;
-  margin-top: -18px;
-  background: linear-gradient(#eaf7ec, #cde6d2);
-  clip-path: polygon(50% 100%, 12% 0, 88% 0);
-  box-shadow: inset 0 -6px 10px rgba(120,170,130,0.3);
-  z-index: 1;
+  width: 90px;
+  height: 110px;
+  margin-top: -22px;
+  background: linear-gradient(#fff, #ffe8f0);
+  clip-path: polygon(50% 100%, 8% 0, 92% 0);
+  box-shadow: inset 0 -8px 14px rgba(255, 180, 205, 0.35);
+  border: 1px solid rgba(255, 190, 215, 0.5);
+  z-index: 15;
 }
 .bq-ribbon {
   position: absolute;
-  bottom: 14px; left: 50%;
+  bottom: 18px; left: 50%;
   transform: translateX(-50%);
-  font-size: 1.8rem;
-  z-index: 3;
+  font-size: 2rem;
+  z-index: 16;
 }
 
 /* ===== ดอกทิวลิป ===== */
@@ -389,15 +389,16 @@ body.intro-locked { overflow: hidden; }
 }
 
 /* ดอกทิวลิปแบบรูปจริง (ในช่อ) */
-.tulip-img { width: clamp(70px, 17vw, 110px); }
+.tulip-img { width: clamp(90px, 24vw, 150px); }
 .tulip-img img {
   width: 100%;
   height: auto;
   display: block;
-  filter: drop-shadow(0 8px 12px rgba(180, 120, 150, 0.3));
-  transition: transform 0.3s;
+  filter: drop-shadow(0 6px 10px rgba(150, 100, 130, 0.28));
+  transition: filter 0.3s;
 }
-.tulip-img.active img { transform: scale(1.14) translateY(-8px); }
+.tulip-img:hover img { filter: drop-shadow(0 10px 16px rgba(150,100,130,0.45)) brightness(1.05); }
+.tulip-img.active img { filter: drop-shadow(0 12px 20px rgba(150,100,130,0.5)) brightness(1.08); }
 
 /* ดอก (3 กลีบ) */
 .tulip-bloom {

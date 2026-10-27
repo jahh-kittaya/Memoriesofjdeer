@@ -166,16 +166,22 @@ function renderGarden() {
   const tulipColors = ["t-pink", "t-rose", "t-purple", "t-peach", "t-red"];
 
   const n = cfg.flowers.length;
-  const mid = (n - 1) / 2; // ดัชนีกลาง สำหรับคำนวณมุมกางออกเป็นช่อ
+  const mid = (n - 1) / 2; // ดัชนีกลาง
 
   const flowersHtml = cfg.flowers
     .map((f, i) => {
       const attrs = `data-title="${escapeAttr(f.title || "")}" data-text="${escapeAttr(f.text || "")}" aria-label="${escapeAttr(f.title || "ดอกไม้")}"`;
-      const offset = i - mid;                 // ระยะจากกลาง (- ซ้าย, + ขวา)
-      const angle = (offset * 11).toFixed(1); // มุมกางของก้านในช่อ
-      const styleVars = `--angle:${angle}deg; --delay:${(i * 0.12).toFixed(2)}s`;
+      const offset = i - mid;                  // ระยะจากกลาง (- ซ้าย, + ขวา)
+      const dist = Math.abs(offset);           // ห่างจากกลางเท่าไหร่
 
-      // โหมดรูปจริง
+      // จัดแบบช่อจริง: กลางสูง+หลัง, ริมเตี้ย+เอียงออก+หน้า
+      const angle = (offset * 14).toFixed(1);               // เอียงออกด้านข้าง
+      const liftY = (dist * dist * 9).toFixed(0);           // ดอกยิ่งริมยิ่งเตี้ยลง (ลงมา)
+      const shiftX = (offset * 22).toFixed(0);              // ขยับออกข้างเป็นวงพัดแคบ
+      const scale = (1 - dist * 0.05).toFixed(2);           // ริม ๆ เล็กลงนิด (perspective)
+      const z = Math.round(10 - dist);                      // กลางอยู่หลัง ริมอยู่หน้า
+      const styleVars = `--angle:${angle}deg; --x:${shiftX}px; --y:${liftY}px; --s:${scale}; --delay:${(i*0.1).toFixed(2)}s; z-index:${z}`;
+
       if (useImage) {
         return `
       <button class="bq-flower tulip-img" style="${styleVars}" ${attrs}>
@@ -183,7 +189,6 @@ function renderGarden() {
       </button>`;
       }
 
-      // โหมดดอกวาด CSS (สำรอง)
       const color = tulipColors[i % tulipColors.length];
       return `
       <button class="bq-flower tulip ${color}" style="${styleVars}" ${attrs}>
@@ -196,7 +201,7 @@ function renderGarden() {
     })
     .join("");
 
-  // ห่อดอกทั้งหมดเป็น "ช่อ" + ก้านรวม + โบว์
+  // ห่อเป็นช่อ + กระดาษห่อ + โบว์
   field.innerHTML = `
     <div class="bouquet">
       <div class="bq-flowers">${flowersHtml}</div>
