@@ -310,6 +310,52 @@ body.intro-locked { overflow: hidden; }
   padding: 1rem 0.5rem 1rem;
 }
 
+/* ===== โหมดช่อภาพ + จุดหัวใจ ===== */
+.bq-photo {
+  position: relative;
+  width: clamp(280px, 72vw, 440px);
+  margin: 0 auto;
+  animation: bloomUp 0.9s cubic-bezier(.34,1.56,.64,1) both;
+}
+.bq-photo-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 16px 36px rgba(180, 140, 160, 0.3));
+}
+.bq-spots { position: absolute; inset: 0; }
+.bq-spot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 30px; height: 30px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  animation: spotIn 0.5s ease both;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes spotIn {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+.bq-spot-heart {
+  font-size: 1rem;
+  filter: drop-shadow(0 0 6px rgba(255, 180, 210, 0.95)) drop-shadow(0 0 10px rgba(255, 140, 190, 0.6));
+  animation: heartPulse 2s ease-in-out infinite;
+}
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+.bq-spot:hover .bq-spot-heart { transform: scale(1.5); }
+.bq-spot.active .bq-spot-heart {
+  transform: scale(1.6);
+  filter: drop-shadow(0 0 10px rgba(255,120,175,1)) drop-shadow(0 0 18px rgba(255,120,175,0.8));
+}
+
 /* ===== ช่อดอกไม้ (bouquet) ===== */
 .bouquet {
   position: relative;
