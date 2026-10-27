@@ -69,23 +69,21 @@
         <p class="countdown-label">⏳ อีก <strong id="cdDays">–</strong> วัน ถึงวันครบรอบปีถัดไป</p>
       </div>
 
-      <a href="#constellation" class="scroll-hint">เลื่อนลงดูเรื่องราวของเรา ↓</a>
+      <a href="#garden" class="scroll-hint">เลื่อนลงดูเรื่องราวของเรา ↓</a>
     </div>
   </header>
 
-  <!-- ===================== CONSTELLATION ===================== -->
-  <section class="section section-sky" id="constellation">
-    <h2 class="section-title sky-title" id="constHeading">🌟 ดวงดาวของเรา</h2>
-    <p class="const-sub" id="constSub"></p>
-    <div class="sky" id="sky">
-      <svg class="sky-lines" id="skyLines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
-      <div class="sky-stars" id="skyStars"></div>
-      <!-- popup ข้อความเมื่อคลิกดาว -->
-      <div class="star-popup" id="starPopup" hidden>
-        <button class="star-popup-close" id="starPopupClose" aria-label="ปิด">&times;</button>
-        <h3 class="star-popup-title" id="starPopupTitle"></h3>
-        <p class="star-popup-text" id="starPopupText"></p>
-      </div>
+  <!-- ===================== GARDEN ===================== -->
+  <section class="section section-garden" id="garden">
+    <h2 class="section-title" id="gardenHeading">🌷 สวนดอกไม้ของเรา</h2>
+    <p class="garden-sub" id="gardenSub"></p>
+    <div class="garden" id="gardenField"></div>
+    <!-- popup ข้อความเมื่อคลิกดอก -->
+    <div class="flower-popup" id="flowerPopup" hidden>
+      <button class="flower-popup-close" id="flowerPopupClose" aria-label="ปิด">&times;</button>
+      <span class="flower-popup-icon">🌷</span>
+      <h3 class="flower-popup-title" id="flowerPopupTitle"></h3>
+      <p class="flower-popup-text" id="flowerPopupText"></p>
     </div>
   </section>
 

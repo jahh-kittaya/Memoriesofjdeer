@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderHero();
   renderCounter();
   startCountdown();
-  renderConstellation();
+  renderGarden();
   renderReasons();
   renderGallery();
   renderLetter();
@@ -149,100 +149,65 @@ function startCountdown() {
   }
 }
 
-/* ---------- ดวงดาวของเรา (Constellation) ---------- */
-// พิกัดดาว (เป็น %) เรียงเป็นตัวอักษร J D
-// ดาว 0-4 = ตัว J, ดาว 5-10 = ตัว D
-const HEART_POINTS = [
-  // ---- ตัว J (ซ้าย) ----
-  { x: 18, y: 22 },  // 0 — หัว J บนซ้าย
-  { x: 40, y: 22 },  // 1 — หัว J บนขวา
-  { x: 31, y: 22 },  // 2 — กลางหัว J (ก้านลง)
-  { x: 31, y: 62 },  // 3 — ก้าน J ล่าง
-  { x: 15, y: 72 },  // 4 — ตะขอ J ซ้ายล่าง
-  // ---- ตัว D (ขวา) ----
-  { x: 58, y: 20 },  // 5 — มุมบน D
-  { x: 58, y: 78 },  // 6 — มุมล่าง D
-  { x: 74, y: 24 },  // 7 — โค้ง D บน
-  { x: 84, y: 40 },  // 8 — โค้ง D ขวาบน
-  { x: 84, y: 58 },  // 9 — โค้ง D ขวาล่าง
-  { x: 74, y: 74 },  // 10 — โค้ง D ล่าง
-];
-// เส้นเชื่อมแยกตามตัวอักษร (คนละเส้น)
-const LETTER_PATHS = [
-  [0, 1],              // ขีดบนของ J
-  [2, 3, 4],           // ก้าน J + ตะขอ
-  [5, 6],              // ขีดตั้งของ D
-  [5, 7, 8, 9, 10, 6], // ส่วนโค้งของ D
-];
-
-function renderConstellation() {
-  const cfg = CONFIG.constellation;
-  const section = document.getElementById("constellation");
-  if (!cfg || !cfg.stars || !cfg.stars.length) {
+/* ---------- สวนดอกทิวลิป (Blooming Garden) ---------- */
+function renderGarden() {
+  const cfg = CONFIG.garden;
+  const section = document.getElementById("garden");
+  if (!cfg || !cfg.flowers || !cfg.flowers.length) {
     if (section) section.style.display = "none";
     return;
   }
 
-  if (cfg.heading) document.getElementById("constHeading").textContent = cfg.heading;
-  document.getElementById("constSub").textContent = cfg.subheading || "";
+  if (cfg.heading) document.getElementById("gardenHeading").textContent = cfg.heading;
+  document.getElementById("gardenSub").textContent = cfg.subheading || "";
 
-  const starsWrap = document.getElementById("skyStars");
-  const linesSvg = document.getElementById("skyLines");
+  const field = document.getElementById("gardenField");
+  const tulipColors = ["t-pink", "t-rose", "t-purple", "t-peach", "t-red"];
 
-  // 1) ดาวพื้นหลังกระพริบแบบสุ่ม
-  let bgStars = "";
-  for (let i = 0; i < 70; i++) {
-    const x = Math.random() * 100;
-    const y = Math.random() * 100;
-    const size = 1 + Math.random() * 2;
-    const delay = (Math.random() * 3).toFixed(2);
-    bgStars += `<span class="bg-star" style="left:${x}%;top:${y}%;width:${size}px;height:${size}px;animation-delay:${delay}s"></span>`;
-  }
-
-  // 2) เส้นเชื่อมดาว (ตัวอักษร J D) — วาดหลายเส้นแยกกัน
-  linesSvg.innerHTML = LETTER_PATHS.map((path, pi) => {
-    const pts = path.map((idx) => `${HEART_POINTS[idx].x},${HEART_POINTS[idx].y}`).join(" ");
-    return `<polyline points="${pts}" class="const-line" style="animation-delay:${0.4 + pi * 0.5}s" />`;
-  }).join("");
-
-  // 3) ดาวหลัก (คลิกได้) ตามพิกัดหัวใจ
-  let mainStars = "";
-  HEART_POINTS.forEach((p, i) => {
-    const data = cfg.stars[i];
-    if (!data) return; // ถ้าข้อความไม่ครบ ก็ข้ามดาวดวงนั้น
-    mainStars += `
-      <button class="main-star" style="left:${p.x}%;top:${p.y}%;animation-delay:${i * 0.15}s"
-              data-title="${escapeAttr(data.title || "")}" data-text="${escapeAttr(data.text || "")}"
-              aria-label="${escapeAttr(data.title || "ดาว")}">
-        <span class="main-star-dot"></span>
+  field.innerHTML = cfg.flowers
+    .map((f, i) => {
+      const color = tulipColors[i % tulipColors.length];
+      const stemH = 70 + ((i % 3) * 18); // ก้านสูงสลับกันให้ดูเป็นธรรมชาติ
+      return `
+      <button class="tulip ${color}" style="animation-delay:${i * 0.25}s"
+              data-title="${escapeAttr(f.title || "")}" data-text="${escapeAttr(f.text || "")}"
+              aria-label="${escapeAttr(f.title || "ดอกไม้")}">
+        <span class="tulip-bloom">
+          <span class="petal petal-l"></span>
+          <span class="petal petal-c"></span>
+          <span class="petal petal-r"></span>
+        </span>
+        <span class="tulip-stem" style="height:${stemH}px">
+          <span class="leaf leaf-l"></span>
+          <span class="leaf leaf-r"></span>
+        </span>
       </button>`;
-  });
+    })
+    .join("");
 
-  starsWrap.innerHTML = bgStars + mainStars;
+  // คลิกดอก → popup
+  const popup = document.getElementById("flowerPopup");
+  const pTitle = document.getElementById("flowerPopupTitle");
+  const pText = document.getElementById("flowerPopupText");
 
-  // 4) คลิกดาว → แสดง popup
-  const popup = document.getElementById("starPopup");
-  const pTitle = document.getElementById("starPopupTitle");
-  const pText = document.getElementById("starPopupText");
-
-  starsWrap.querySelectorAll(".main-star").forEach((star) => {
-    star.addEventListener("click", (e) => {
+  field.querySelectorAll(".tulip").forEach((flower) => {
+    flower.addEventListener("click", (e) => {
       e.stopPropagation();
-      pTitle.textContent = star.dataset.title;
-      pText.textContent = star.dataset.text;
+      pTitle.textContent = flower.dataset.title;
+      pText.textContent = flower.dataset.text;
       popup.hidden = false;
-      starsWrap.querySelectorAll(".main-star").forEach((s) => s.classList.remove("active"));
-      star.classList.add("active");
+      field.querySelectorAll(".tulip").forEach((f) => f.classList.remove("active"));
+      flower.classList.add("active");
     });
   });
 
   const closePopup = () => {
     popup.hidden = true;
-    starsWrap.querySelectorAll(".main-star").forEach((s) => s.classList.remove("active"));
+    field.querySelectorAll(".tulip").forEach((f) => f.classList.remove("active"));
   };
-  document.getElementById("starPopupClose").addEventListener("click", closePopup);
-  document.getElementById("sky").addEventListener("click", (e) => {
-    if (e.target.id === "sky" || e.target.id === "skyStars" || e.target.id === "skyLines") closePopup();
+  document.getElementById("flowerPopupClose").addEventListener("click", closePopup);
+  section.addEventListener("click", (e) => {
+    if (e.target.id === "garden" || e.target.id === "gardenField") closePopup();
   });
 }
 
