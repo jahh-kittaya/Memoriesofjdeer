@@ -338,6 +338,21 @@ body.intro-locked { overflow: hidden; }
   50% { transform: rotate(3deg); }
 }
 
+/* ดอกทิวลิปแบบรูปจริง */
+.tulip-img {
+  width: clamp(80px, 20vw, 120px);
+  height: auto;
+}
+.tulip-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 8px 12px rgba(180, 120, 150, 0.3));
+  transition: transform 0.3s;
+}
+.tulip-img:hover img { transform: scale(1.08) translateY(-4px); }
+.tulip-img.active img { transform: scale(1.12) translateY(-6px); }
+
 /* ดอก (3 กลีบ) */
 .tulip-bloom {
   position: relative;
