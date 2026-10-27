@@ -286,7 +286,9 @@ body.intro-locked { overflow: hidden; }
 
 /* ===================== CONSTELLATION (ดวงดาวของเรา) ===================== */
 .section-garden {
-  background: linear-gradient(180deg, #fff6fb 0%, #f3fff5 60%, #e3f9e8 100%);
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 42%),
+    linear-gradient(160deg, #ffe4f0 0%, #fbe6ff 38%, #e9e6ff 68%, #e0f0ff 100%);
   border-radius: 32px;
   margin: 2rem auto;
   max-width: 1000px;
@@ -316,6 +318,17 @@ body.intro-locked { overflow: hidden; }
   width: clamp(280px, 72vw, 440px);
   margin: 0 auto;
   animation: bloomUp 0.9s cubic-bezier(.34,1.56,.64,1) both;
+}
+/* รัศมีเรืองแสงนุ่ม ๆ ด้านหลังช่อ ให้ดอกขาวลอยเด่น */
+.bq-photo::before {
+  content: "";
+  position: absolute;
+  left: 50%; top: 42%;
+  transform: translate(-50%, -50%);
+  width: 90%; height: 70%;
+  background: radial-gradient(ellipse, rgba(255,255,255,0.85) 0%, rgba(255,214,236,0.4) 45%, transparent 72%);
+  filter: blur(14px);
+  z-index: -1;
 }
 .bq-photo-img {
   width: 100%;
