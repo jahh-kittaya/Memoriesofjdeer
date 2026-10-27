@@ -162,16 +162,26 @@ function renderGarden() {
   document.getElementById("gardenSub").textContent = cfg.subheading || "";
 
   const field = document.getElementById("gardenField");
+  const useImage = !!cfg.flowerImage;
   const tulipColors = ["t-pink", "t-rose", "t-purple", "t-peach", "t-red"];
 
   field.innerHTML = cfg.flowers
     .map((f, i) => {
+      const attrs = `data-title="${escapeAttr(f.title || "")}" data-text="${escapeAttr(f.text || "")}" aria-label="${escapeAttr(f.title || "ดอกไม้")}"`;
+
+      // โหมดรูปจริง
+      if (useImage) {
+        return `
+      <button class="tulip tulip-img" style="animation-delay:${i * 0.2}s" ${attrs}>
+        <img src="${escapeAttr(cfg.flowerImage)}" alt="${escapeAttr(f.title || "ดอกไม้")}" />
+      </button>`;
+      }
+
+      // โหมดดอกวาด CSS (สำรอง)
       const color = tulipColors[i % tulipColors.length];
-      const stemH = 70 + ((i % 3) * 18); // ก้านสูงสลับกันให้ดูเป็นธรรมชาติ
+      const stemH = 70 + ((i % 3) * 18);
       return `
-      <button class="tulip ${color}" style="animation-delay:${i * 0.25}s"
-              data-title="${escapeAttr(f.title || "")}" data-text="${escapeAttr(f.text || "")}"
-              aria-label="${escapeAttr(f.title || "ดอกไม้")}">
+      <button class="tulip ${color}" style="animation-delay:${i * 0.25}s" ${attrs}>
         <span class="tulip-bloom">
           <span class="petal petal-l"></span>
           <span class="petal petal-c"></span>
