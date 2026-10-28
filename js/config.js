@@ -170,4 +170,13 @@ const CONFIG = {
     youtubeId: "UgrXNEpKQo4",
     title: "เพลงของเรา",
   },
+
+  /* ---------- ฉากจบ 🎬 ---------- */
+  finale: {
+    title: "Happy 2nd Anniversary",
+    couple: "Kittaya ❤️ Thanida",
+    message: "ขอบคุณที่เลือกเดินด้วยกันมา 2 ปี\nและอีกหลาย ๆ ปีต่อจากนี้ 🤍",
+    date: "24 · XI · MMXXVI",
+    buttonText: "🎉 ฉลองอีกครั้ง!",
+  },
 };

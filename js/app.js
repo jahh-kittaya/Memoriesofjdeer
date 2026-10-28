@@ -20,7 +20,57 @@ document.addEventListener("DOMContentLoaded", () => {
   spawnHearts();
   setupIntro();
   setupCatPeek();
+  renderFinale();
 });
+
+/* ---------- ฉากจบ "Happy 2nd Anniversary" ---------- */
+function renderFinale() {
+  const cfg = CONFIG.finale;
+  const section = document.getElementById("finale");
+  if (!cfg) { if (section) section.style.display = "none"; return; }
+
+  document.getElementById("finaleTitle").textContent = cfg.title || "";
+  document.getElementById("finaleCouple").textContent = cfg.couple || "";
+  // รองรับขึ้นบรรทัดใหม่ด้วย \n
+  document.getElementById("finaleMessage").innerHTML = (cfg.message || "")
+    .split("\n").map((l) => escapeHtml(l)).join("<br>");
+  document.getElementById("finaleDate").textContent = cfg.date || "";
+  const btn = document.getElementById("finaleBtn");
+  btn.textContent = cfg.buttonText || "🎉 ฉลองอีกครั้ง!";
+
+  // เล่นคอนเฟตติเมื่อเลื่อนมาถึงฉากจบ (ครั้งเดียว)
+  let played = false;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        document.getElementById("finaleInner").classList.add("show");
+        if (!played) { fireConfetti(); played = true; }
+      }
+    });
+  }, { threshold: 0.4 });
+  io.observe(section);
+
+  // ปุ่มฉลองซ้ำ
+  btn.addEventListener("click", fireConfetti);
+}
+
+/* ---------- คอนเฟตติหัวใจ/ดาวโปรย ---------- */
+function fireConfetti() {
+  const wrap = document.getElementById("finaleConfetti");
+  if (!wrap) return;
+  const items = ["💗", "💖", "🤍", "✨", "💕", "⭐", "🌸"];
+  for (let i = 0; i < 46; i++) {
+    const c = document.createElement("span");
+    c.className = "confetti-piece";
+    c.textContent = items[Math.floor(Math.random() * items.length)];
+    c.style.left = Math.random() * 100 + "%";
+    c.style.fontSize = 0.9 + Math.random() * 1.3 + "rem";
+    c.style.animationDuration = 2.5 + Math.random() * 2 + "s";
+    c.style.animationDelay = Math.random() * 0.6 + "s";
+    wrap.appendChild(c);
+    setTimeout(() => c.remove(), 5000);
+  }
+}
 
 /* ---------- น้องอันยองโผล่มาทัก ---------- */
 function setupCatPeek() {
