@@ -312,8 +312,30 @@ body.intro-locked { overflow: hidden; }
   padding: 1rem 0.5rem 1rem;
 }
 
+/* ===== กลิตเตอร์/ดาวจาง ๆ บนพื้นหลัง ===== */
+.garden-glitter {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.glitter {
+  position: absolute;
+  color: #fff;
+  opacity: 0;
+  line-height: 1;
+  text-shadow: 0 0 6px rgba(255, 200, 230, 0.9);
+  animation: glitterTwinkle ease-in-out infinite;
+}
+@keyframes glitterTwinkle {
+  0%, 100% { opacity: 0; transform: scale(0.6); }
+  50% { opacity: 0.85; transform: scale(1.1); }
+}
+
 /* ===== โหมดช่อภาพ + จุดหัวใจ ===== */
 .bq-photo {
+  z-index: 1;
   position: relative;
   width: clamp(280px, 72vw, 440px);
   margin: 0 auto;

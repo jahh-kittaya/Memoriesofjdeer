@@ -176,7 +176,21 @@ function renderBouquetPhoto(cfg, field, section) {
     })
     .join("");
 
+  // ประกายกลิตเตอร์/ดาวจาง ๆ กระจายทั่วพื้นหลัง
+  let glitter = "";
+  const sparkleChars = ["✦", "✧", "⋆", "·", "✫"];
+  for (let i = 0; i < 40; i++) {
+    const x = (Math.random() * 100).toFixed(1);
+    const y = (Math.random() * 100).toFixed(1);
+    const size = (0.5 + Math.random() * 1).toFixed(2);
+    const delay = (Math.random() * 4).toFixed(2);
+    const dur = (2.5 + Math.random() * 2.5).toFixed(2);
+    const ch = sparkleChars[Math.floor(Math.random() * sparkleChars.length)];
+    glitter += `<span class="glitter" style="left:${x}%;top:${y}%;font-size:${size}rem;animation-delay:${delay}s;animation-duration:${dur}s">${ch}</span>`;
+  }
+
   field.innerHTML = `
+    <div class="garden-glitter" aria-hidden="true">${glitter}</div>
     <div class="bq-photo">
       <img class="bq-photo-img" src="${escapeAttr(cfg.bouquetImage)}" alt="ช่อดอกทิวลิป" />
       <div class="bq-spots">${spots}</div>
