@@ -20,7 +20,47 @@ document.addEventListener("DOMContentLoaded", () => {
   spawnHearts();
   setupIntro();
   setupCatPeek();
+  setupReply();
 });
+
+/* ---------- ข้อความจากมี๊ถึงป๊า (เก็บในเครื่อง) ---------- */
+function setupReply() {
+  const input = document.getElementById("replyInput");
+  const btn = document.getElementById("replyBtn");
+  const saved = document.getElementById("replySaved");
+  const savedText = document.getElementById("replySavedText");
+  const editBtn = document.getElementById("replyEdit");
+  if (!input || !btn) return;
+
+  const KEY = "mee_reply_to_pa";
+
+  const showSaved = (msg) => {
+    savedText.textContent = msg;
+    saved.hidden = false;
+    input.hidden = true;
+    btn.hidden = true;
+  };
+  const showInput = () => {
+    saved.hidden = true;
+    input.hidden = false;
+    btn.hidden = false;
+    input.focus();
+  };
+
+  // โหลดข้อความเดิมถ้าเคยเขียนไว้
+  const existing = localStorage.getItem(KEY);
+  if (existing) { input.value = existing; showSaved(existing); }
+
+  btn.addEventListener("click", () => {
+    const msg = input.value.trim();
+    if (!msg) { input.focus(); return; }
+    localStorage.setItem(KEY, msg);
+    showSaved(msg);
+    popHeart(document.getElementById("reply")); // หัวใจเด้งตอนบันทึก
+  });
+
+  editBtn.addEventListener("click", showInput);
+}
 
 /* ---------- น้องอันยองโผล่มาทัก ---------- */
 function setupCatPeek() {
