@@ -321,16 +321,55 @@ function renderReasons() {
   const section = document.getElementById("reasons");
   const grid = document.getElementById("reasonsGrid");
 
+  const hasEnvelope = cfg && cfg.style === "envelope" && cfg.paragraphs && cfg.paragraphs.length;
   const hasProse = cfg && cfg.style === "prose" && cfg.paragraphs && cfg.paragraphs.length;
   const hasCards = cfg && cfg.items && cfg.items.length;
 
-  if (!cfg || (!hasProse && !hasCards)) {
+  if (!cfg || (!hasEnvelope && !hasProse && !hasCards)) {
     if (section) section.style.display = "none";
     return;
   }
 
   if (cfg.heading) document.getElementById("reasonsHeading").textContent = cfg.heading;
   document.getElementById("reasonsSub").textContent = cfg.subheading || "";
+
+  // โหมดซองจดหมาย (envelope) — กดเปิดอ่าน
+  if (hasEnvelope) {
+    grid.className = "reasons-envelope";
+    grid.innerHTML = `
+      <button class="envelope" id="envelopeBtn" aria-label="เปิดอ่านจดหมาย">
+        <span class="env-flap"></span>
+        <span class="env-body">
+          <span class="env-heart">💗</span>
+          <span class="env-label">${escapeHtml(cfg.envelopeLabel || "เปิดอ่านจดหมาย")}</span>
+        </span>
+        <span class="env-hint">แตะเพื่อเปิด 💌</span>
+      </button>`;
+
+    // เตรียมเนื้อหาจดหมายเต็มจอ
+    document.getElementById("letterPaperTitle").textContent = cfg.letterTitle || "";
+    document.getElementById("letterPaperBody").innerHTML = cfg.paragraphs
+      .map((p) => `<p>${formatEmphasis(p)}</p>`)
+      .join("");
+    document.getElementById("letterPaperSign").textContent = cfg.signature || "";
+
+    const overlay = document.getElementById("letterOverlay");
+    const paper = document.getElementById("letterPaper");
+    const openLetter = () => {
+      overlay.hidden = false;
+      document.body.classList.add("intro-locked");
+      paper.scrollTop = 0;
+    };
+    const closeLetter = () => {
+      overlay.hidden = true;
+      document.body.classList.remove("intro-locked");
+    };
+    document.getElementById("envelopeBtn").addEventListener("click", openLetter);
+    document.getElementById("letterOverlayClose").addEventListener("click", closeLetter);
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) closeLetter(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !overlay.hidden) closeLetter(); });
+    return;
+  }
 
   // โหมดจดหมายยาว (prose)
   if (hasProse) {
