@@ -552,12 +552,18 @@ function setupMusic() {
 let ytReady = false;
 let ytPlayer = null;
 let ytPlaying = false;
+let ytWantPlay = false; // จำว่าผู้ใช้กดอยากเล่นตอน API ยังไม่พร้อม
 
 function setupYouTubeMusic(videoId, btn) {
-  // โหลดสคริปต์ YouTube IFrame API
-  const tag = document.createElement("script");
-  tag.src = "https://www.youtube.com/iframe_api";
-  document.head.appendChild(tag);
+  // โหลดสคริปต์ YouTube IFrame API (กันโหลดซ้ำ)
+  if (!document.getElementById("yt-iframe-api")) {
+    const tag = document.createElement("script");
+    tag.id = "yt-iframe-api";
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+  }
+
+  const markPlaying = () => { btn.classList.add("playing"); ytPlaying = true; };
 
   window.onYouTubeIframeAPIReady = function () {
     ytPlayer = new YT.Player("ytPlayer", {
@@ -566,13 +572,29 @@ function setupYouTubeMusic(videoId, btn) {
       videoId: videoId,
       playerVars: { autoplay: 0, loop: 1, playlist: videoId, playsinline: 1 },
       events: {
-        onReady: () => { ytReady = true; },
+        onReady: () => {
+          ytReady = true;
+          // ถ้าผู้ใช้กด "เปิด" ไปแล้วตอน API ยังไม่พร้อม → เล่นทันทีตอนนี้
+          if (ytWantPlay) { ytPlayer.playVideo(); markPlaying(); }
+        },
+        // sync สถานะปุ่มกับสถานะจริงของ player
+        onStateChange: (e) => {
+          if (e.data === YT.PlayerState.PLAYING) { btn.classList.add("playing"); ytPlaying = true; }
+          else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) { btn.classList.remove("playing"); ytPlaying = false; }
+        },
       },
     });
   };
 
-  const playYt = () => { if (ytReady && ytPlayer) { ytPlayer.playVideo(); btn.classList.add("playing"); ytPlaying = true; } };
-  const pauseYt = () => { if (ytPlayer) { ytPlayer.pauseVideo(); btn.classList.remove("playing"); ytPlaying = false; } };
+  const playYt = () => {
+    if (ytReady && ytPlayer) { ytPlayer.playVideo(); markPlaying(); }
+    else { ytWantPlay = true; }  // ยังไม่พร้อม → จำไว้ เดี๋ยว onReady เล่นให้
+  };
+  const pauseYt = () => {
+    ytWantPlay = false;
+    if (ytPlayer) ytPlayer.pauseVideo();
+    btn.classList.remove("playing"); ytPlaying = false;
+  };
   startMusicFn = playYt; // ให้ปุ่ม intro เริ่มเพลงได้
 
   btn.addEventListener("click", () => (ytPlaying ? pauseYt() : playYt()));
