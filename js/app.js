@@ -595,9 +595,14 @@ function setupYouTubeMusic(videoId, btn) {
     if (ytPlayer) ytPlayer.pauseVideo();
     btn.classList.remove("playing"); ytPlaying = false;
   };
-  startMusicFn = playYt; // ให้ปุ่ม intro เริ่มเพลงได้
+  startMusicFn = playYt; // ให้ปุ่ม intro เริ่มเพลงได้ (ได้ผลบนคอม)
 
   btn.addEventListener("click", () => (ytPlaying ? pauseYt() : playYt()));
+
+  // บนมือถือ iOS/Safari บล็อกการเล่นจากโค้ด — ต้องให้ผู้ใช้แตะตัว player เอง
+  // จึงวาง iframe YouTube จริงซ้อนบนปุ่ม 🎵 (โปร่งใส) ให้การแตะไปโดนตัว player โดยตรง
+  const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  if (isMobile) document.body.classList.add("yt-mobile");
 }
 
 /* ---------- Lightbox ---------- */
