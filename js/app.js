@@ -19,7 +19,55 @@ document.addEventListener("DOMContentLoaded", () => {
   setupLightbox();
   spawnHearts();
   setupIntro();
+  setupCatPeek();
 });
+
+/* ---------- น้องอันยองโผล่มาทัก ---------- */
+function setupCatPeek() {
+  const cfg = CONFIG.catPeek;
+  if (!cfg || !cfg.enabled || !cfg.messages || !cfg.messages.length) return;
+
+  const peek = document.getElementById("catPeek");
+  const img = document.getElementById("catPeekImg");
+  const bubble = document.getElementById("catBubble");
+  img.src = cfg.image || "images/cat.png";
+
+  let hideTimer = null;
+
+  const showCat = () => {
+    const msg = cfg.messages[Math.floor(Math.random() * cfg.messages.length)];
+    bubble.textContent = msg;
+    // สลับออกฝั่งซ้าย/ขวาสุ่ม
+    peek.classList.toggle("left", Math.random() < 0.5);
+    peek.classList.add("show");
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hideCat, 6000);
+  };
+  const hideCat = () => peek.classList.remove("show");
+
+  // คลิกน้อง → เปลี่ยนคำพูด + หัวใจเด้ง
+  peek.addEventListener("click", () => {
+    bubble.textContent = cfg.messages[Math.floor(Math.random() * cfg.messages.length)];
+    popHeart(peek);
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hideCat, 6000);
+  });
+
+  // โผล่ครั้งแรกหลังเข้าเว็บ ~8 วิ แล้ววนทุก ~28-40 วิ
+  const loop = () => {
+    showCat();
+    setTimeout(loop, 28000 + Math.random() * 12000);
+  };
+  setTimeout(loop, 8000);
+}
+
+function popHeart(parent) {
+  const h = document.createElement("span");
+  h.className = "cat-pop-heart";
+  h.textContent = "💗";
+  parent.appendChild(h);
+  setTimeout(() => h.remove(), 1000);
+}
 
 /* ---------- หน้า intro "คลิกเพื่อเปิด" ---------- */
 function setupIntro() {
