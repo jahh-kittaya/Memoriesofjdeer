@@ -562,6 +562,116 @@ body.intro-locked { overflow: hidden; }
   cursor: pointer; line-height: 1;
 }
 
+/* ===================== REASONS — โหมดซองจดหมาย ===================== */
+.reasons-envelope {
+  display: flex;
+  justify-content: center;
+  margin-top: -1rem;
+}
+.envelope {
+  position: relative;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: clamp(260px, 72vw, 340px);
+  padding: 0;
+  animation: fadeUp 0.7s ease both;
+}
+.envelope:hover { transform: translateY(-5px); transition: transform 0.3s; }
+.env-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 180px;
+  background: linear-gradient(145deg, #fff, #ffe9f1);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 180, 205, 0.5);
+}
+/* ฝาซอง (สามเหลี่ยม) */
+.env-flap {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 90px;
+  background: linear-gradient(145deg, #ffd7e6, #ffc2d8);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  border-radius: 14px 14px 0 0;
+  z-index: 3;
+  transform-origin: top center;
+  transition: transform 0.4s;
+}
+.envelope:hover .env-flap { transform: rotateX(32deg); }
+.env-heart { font-size: 2rem; margin-top: 2.5rem; z-index: 2; animation: heartPulse 2s ease-in-out infinite; }
+.env-label { color: var(--pink-deep); font-weight: 600; font-size: 1.05rem; z-index: 2; padding: 0 1rem; text-align: center; }
+.env-hint { display: block; margin-top: 0.9rem; color: var(--text-soft); font-size: 0.85rem; }
+
+/* จดหมายเต็มจอ */
+.letter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(60, 30, 45, 0.55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  animation: fadeIn 0.3s ease;
+}
+.letter-overlay[hidden] { display: none; }
+.letter-paper {
+  position: relative;
+  background: linear-gradient(160deg, #fffdfb, #fff4f8);
+  width: min(620px, 94vw);
+  max-height: 86vh;
+  overflow-y: auto;
+  border-radius: 20px;
+  padding: 2.8rem 2rem 2.2rem;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.4);
+  animation: popIn 0.35s ease;
+}
+.letter-paper-title {
+  font-family: "Dancing Script", "Kanit", cursive;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  color: var(--pink-deep);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.letter-paper-body p {
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.9;
+  margin-bottom: 1.1rem;
+  text-align: left;
+}
+.letter-paper-body .reason-em {
+  display: block;
+  text-align: center;
+  color: var(--pink-deep);
+  font-size: 1.1em;
+  font-weight: 600;
+  font-style: italic;
+  margin: 1rem auto;
+}
+.letter-paper-sign {
+  text-align: right;
+  font-family: "Dancing Script", "Kanit", cursive;
+  font-size: 1.4rem;
+  color: var(--pink-deep);
+  margin-top: 1.5rem;
+}
+.letter-overlay-close {
+  position: absolute;
+  top: 10px; right: 16px;
+  border: none; background: none;
+  font-size: 1.8rem; color: var(--text-soft);
+  cursor: pointer; line-height: 1;
+  z-index: 2;
+}
+
 /* ===================== REASONS — โหมดจดหมายยาว ===================== */
 .reasons-prose {
   max-width: 720px;
