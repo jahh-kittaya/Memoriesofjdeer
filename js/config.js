@@ -109,12 +109,13 @@ const CONFIG = {
    * caption = คำบรรยายใต้รูป (จะไม่ใส่ก็ได้)
    */
   gallery: [
-    { src: "https://picsum.photos/seed/love1/600/400", caption: "ครั้งแรกที่เจอกัน" },
-    { src: "https://picsum.photos/seed/love2/600/400", caption: "ทริปแรกด้วยกัน" },
-    { src: "https://picsum.photos/seed/love3/600/400", caption: "วันเกิดปีนั้น" },
-    { src: "https://picsum.photos/seed/love4/600/400", caption: "ปีใหม่ที่อบอุ่น" },
-    { src: "https://picsum.photos/seed/love5/600/400", caption: "มื้อเย็นสุดพิเศษ" },
-    { src: "https://picsum.photos/seed/love6/600/400", caption: "ช่วงเวลาสบาย ๆ" },
+    { src: "images/photo1.jpg", caption: "" },
+    { src: "images/photo3.jpg", caption: "" },
+    { src: "images/photo4.jpg", caption: "" },
+    { src: "images/photo5.jpg", caption: "" },
+    { src: "images/photo6.jpg", caption: "" },
+    { src: "images/photo7.jpg", caption: "" },
+    { src: "images/photo8.jpg", caption: "" },
   ],
 
   /* ---------- สวนดอกทิวลิป 🌷 ----------
