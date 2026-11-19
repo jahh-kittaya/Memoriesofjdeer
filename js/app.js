@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderLetter();
   setupMusic();
   setupLightbox();
-  spawnHearts();
   setupIntro();
   setupCatPeek();
   renderFinale();
@@ -717,22 +716,6 @@ function setupLightbox() {
   document.getElementById("lightboxClose").addEventListener("click", close);
   lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
-}
-
-/* ---------- หัวใจลอย ---------- */
-function spawnHearts() {
-  const bg = document.getElementById("heartsBg");
-  const emojis = ["💖", "💕", "💗", "🩷", "❤️"];
-  setInterval(() => {
-    const h = document.createElement("span");
-    h.className = "floating-heart";
-    h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.fontSize = 0.9 + Math.random() * 1.4 + "rem";
-    h.style.animationDuration = 6 + Math.random() * 6 + "s";
-    bg.appendChild(h);
-    setTimeout(() => h.remove(), 12000);
-  }, 700);
 }
 
 /* ---------- utils ---------- */
