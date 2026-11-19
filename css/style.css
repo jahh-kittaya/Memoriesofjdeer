@@ -819,6 +819,19 @@ body.yt-mobile #ytPlayer iframe {
   display: block;
 }
 .gallery-item:hover img { transform: scale(1.08); }
+
+/* รูปสุดท้าย (featured): เต็มความกว้าง ใช้สัดส่วนจริงของรูป ไม่ครอปใครออก */
+.gallery-item.featured {
+  grid-column: 1 / -1;
+  aspect-ratio: auto;
+  max-width: 760px;
+  width: 100%;
+  justify-self: center;
+  margin-top: 0.6rem;
+}
+.gallery-item.featured img { height: auto; object-fit: contain; }
+.gallery-item.featured:hover img { transform: scale(1.03); }
+.gallery-item.featured .cap { opacity: 1; font-size: 1rem; text-align: center; }
 .gallery-item .cap {
   position: absolute;
   left: 0; right: 0; bottom: 0;

@@ -115,6 +115,8 @@ const CONFIG = {
     { src: "images/photo6.jpg", caption: "" },
     { src: "images/photo7.jpg", caption: "" },
     { src: "images/photo8.jpg", caption: "" },
+    // รูปสุดท้าย แสดงเต็มความกว้าง ไม่ถูกครอป (featured: true)
+    { src: "images/photo9.png", caption: "", featured: true },
   ],
 
   /* ---------- สวนดอกทิวลิป 🌷 ----------

@@ -513,7 +513,7 @@ function renderGallery() {
   grid.innerHTML = CONFIG.gallery
     .map(
       (img, i) => `
-      <div class="gallery-item" data-src="${escapeAttr(img.src)}" data-cap="${escapeAttr(img.caption || "")}" style="animation-delay:${i * 0.06}s">
+      <div class="gallery-item${img.featured ? " featured" : ""}" data-src="${escapeAttr(img.src)}" data-cap="${escapeAttr(img.caption || "")}" style="animation-delay:${i * 0.06}s">
         <img src="${escapeAttr(img.src)}" alt="${escapeAttr(img.caption || "ความทรงจำ")}" loading="lazy" />
         ${img.caption ? `<span class="cap">${escapeHtml(img.caption)}</span>` : ""}
       </div>`
