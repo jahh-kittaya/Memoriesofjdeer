@@ -167,10 +167,11 @@ const CONFIG = {
    */
   music: {
     // ใส่ไฟล์เพลง (mp3) ไว้ในโฟลเดอร์ music/ แล้วใส่ชื่อไฟล์ที่นี่ หรือเว้นว่าง ""
-    src: "",
+    src: "music/song.mp3",
     // หรือใส่ YouTube video ID เพื่อเล่นเพลงจาก YouTube (ถ้าตั้งค่านี้ จะใช้ YouTube แทน src)
-    youtubeId: "UgrXNEpKQo4",
-    title: "เพลงของเรา",
+    // ปิดไว้ เพราะวิดีโอเดิม (UgrXNEpKQo4) เล่นบนเว็บอื่นไม่ได้
+    youtubeId: "",
+    title: "Shania Twain (Connie Talbot & Boyce Avenue cover)",
   },
 
   /* ---------- ฉากจบ 🎬 ---------- */

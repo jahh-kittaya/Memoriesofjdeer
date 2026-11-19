@@ -592,7 +592,12 @@ function setupMusic() {
   btn.hidden = false;
 
   let playing = false;
-  const play = () => { audio.play().catch(() => {}); btn.classList.add("playing"); playing = true; };
+  // ปุ่มหมุนก็ต่อเมื่อเบราว์เซอร์เล่นได้จริง
+  const play = () => {
+    audio.play()
+      .then(() => { btn.classList.add("playing"); playing = true; })
+      .catch(() => { btn.classList.remove("playing"); playing = false; });
+  };
   const pause = () => { audio.pause(); btn.classList.remove("playing"); playing = false; };
   startMusicFn = play; // ให้ปุ่ม intro เริ่มเพลงได้
   btn.addEventListener("click", () => (playing ? pause() : play()));
