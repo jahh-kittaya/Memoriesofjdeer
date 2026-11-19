@@ -21,7 +21,46 @@ document.addEventListener("DOMContentLoaded", () => {
   setupIntro();
   setupCatPeek();
   renderFinale();
+  startPetals();
 });
+
+/* ---------- กลีบทิวลิปขาวร่วงทั้งหน้าเว็บ ---------- */
+function startPetals() {
+  const cfg = CONFIG.petals;
+  if (!cfg || !cfg.enabled) return;
+  // เคารพผู้ใช้ที่ตั้งค่าลดการเคลื่อนไหวในเครื่อง
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const layer = document.createElement("div");
+  layer.className = "petal-layer";
+  layer.setAttribute("aria-hidden", "true");
+  document.body.appendChild(layer);
+
+  const max = cfg.max || 16;
+  const spawn = () => {
+    if (document.hidden || layer.childElementCount >= max) return;
+    const fall = document.createElement("span");      // ชั้นนอก: ร่วงลง
+    fall.className = "petal-fall";
+    const dur = 9 + Math.random() * 7;                  // 9–16 วินาที
+    fall.style.left = Math.random() * 100 + "vw";
+    fall.style.animationDuration = dur + "s";
+
+    const petal = document.createElement("span");     // ชั้นใน: ส่าย + หมุน
+    petal.className = "petal";
+    const size = 10 + Math.random() * 9;                // 10–19px
+    petal.style.width = size + "px";
+    petal.style.height = size * 1.35 + "px";
+    petal.style.animationDuration = 2.6 + Math.random() * 2 + "s";
+    petal.style.animationDelay = -Math.random() * 3 + "s";
+
+    fall.appendChild(petal);
+    layer.appendChild(fall);
+    setTimeout(() => fall.remove(), dur * 1000 + 200);
+  };
+
+  for (let i = 0; i < 4; i++) setTimeout(spawn, i * 600); // เริ่มด้วยไม่กี่กลีบ
+  setInterval(spawn, 900);
+}
 
 /* ---------- ฉากจบ "Happy 2nd Anniversary" ---------- */
 function renderFinale() {

@@ -174,6 +174,14 @@ const CONFIG = {
     title: "Shania Twain (Connie Talbot & Boyce Avenue cover)",
   },
 
+  /* ---------- กลีบทิวลิปขาวร่วง 🤍 ----------
+   * enabled = เปิด/ปิด | max = จำนวนกลีบบนจอพร้อมกันสูงสุด
+   */
+  petals: {
+    enabled: true,
+    max: 16,
+  },
+
   /* ---------- ฉากจบ 🎬 ---------- */
   finale: {
     title: "Happy 2nd Anniversary",
